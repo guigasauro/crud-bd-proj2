@@ -4,3 +4,10 @@ menuDePesquisaDeProdutoDoFuncionario/menuDePesquisaDeProdutoDoCliente [Gabriel]
 # carrinhoDeCompras [Gulherme]
 # finalizarCompra [Guilherme]
 
+x [ 1 ] -> Nome
+x [ 2 ] ->  Faixa de preço -> De X para Y
+x [ 3 ] -> Categorias
+x [ 4 ] -> Fabricação
+x [ 5 ] -> Listar por quantidade acima de X [exclusivo]
+x [ 6 ] -> Exibir todos
+[ 7 ] -> Relatório [exclusivo] [Discutível]

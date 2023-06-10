@@ -6,13 +6,15 @@ public class ProdutoView {
     private double preco;
     private String nomeCategoria;
     private String nomeFabricante;
+    private int quantidade;
 
-    public ProdutoView(int idProduto, String nome, double preco, String nomeCategoria, String nomeFabricante) {
+    public ProdutoView(int idProduto, String nome, double preco, String nomeCategoria, String nomeFabricante, int quantidade) {
         this.idProduto = idProduto;
         this.nome = nome;
         this.preco = preco;
         this.nomeCategoria = nomeCategoria;
         this.nomeFabricante = nomeFabricante;
+        this.quantidade = quantidade;
     }
 
     public int getIdProduto() {
@@ -34,4 +36,6 @@ public class ProdutoView {
     public String getNomeFabricante() {
         return nomeFabricante;
     }
+
+    public int getQuantidade() {return quantidade;}
 }
