@@ -1,7 +1,9 @@
 package br.com.mercado.aplicacao;
 
-import br.com.mercado.dao.ProdutoViewDAO;
+import br.com.mercado.dao.*;
+import br.com.mercado.model.Cliente;
 import br.com.mercado.service.MainService;
+import br.com.mercado.dao.ClienteDAO;
 
 import java.util.Scanner;
 
@@ -19,6 +21,12 @@ public class Main {
                     "[4] Categoria\n" +
                     "[5] Fabricante\n" +
                     "[6] Quantidade minima\n" +
+                    "[7] Relatório\n" + // Precisa da função de vendas
+                    "-=-=-\n" +
+                    "[8] Cadastrar cliente\n" + // fazer
+                    "[9] Logar na conta\n" + // fazer
+                    "[10] Exibir detalhes da conta\n" + // fazer
+                    "-=-=-\n" +
                     "[0] Sair do programa\n");
 
             int opcao = MainService.perguntaNumeroInt("Digite a opção desejada: ");
@@ -56,6 +64,34 @@ public class Main {
                 int qtd = MainService.perguntaNumeroInt(titulo);
                 titulo = "Busca pela quantidade igual ou acima de " + qtd;
                 ProdutoViewDAO.imprimirProdutos(ProdutoViewDAO.getForAmountProdutoView(qtd), titulo);
+            } else if (opcao==7) {
+                break;
+            } else if (opcao==8) {
+                System.out.println("Digite os seu dados para o cadastro");
+                String nome = MainService.perguntaString("Nome: ");
+                int telefone = MainService.perguntaNumeroInt("Número de telefone: ");
+                AnimeDAO.imprimirAnimes(AnimeDAO.getAllAnime());
+                int idAnime = MainService.perguntaNumeroInt("Id do anime preferido: ");
+                CidadeDAO.imprimirCidade(CidadeDAO.getAllCidade());
+                int idCidade = MainService.perguntaNumeroInt("Id da cidade natal: ");
+                TimeTorcedorDAO.imprimirTimeTorcedor(TimeTorcedorDAO.getAllTimeTorcedor());
+                int idTimeTorcedor = MainService.perguntaNumeroInt("Id do time torcedor: ");
+
+                Cliente cliente = new Cliente(nome,telefone, idAnime, idCidade, idTimeTorcedor);
+                int idCliente = ClienteDAO.save(cliente);
+
+                System.out.println("Cadastrado com sucesso!, seu ID: " + idCliente);
+
+                break;
+            } else if (opcao==9) {
+                int idCliente = 0;
+                do {
+                    idCliente = MainService.perguntaNumeroInt("Digite o seu id para efetuar o login: ");
+                    idCliente = ClienteDAO.getClientId(idCliente);
+                } while (idCliente==0);
+                System.out.println("Login efetuado com sucesso!, seu ID: " + idCliente);
+            } else if (opcao==10) {
+                break;
             }
         }
     }

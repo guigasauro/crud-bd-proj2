@@ -1,18 +1,31 @@
 package br.com.mercado.model;
 
 public class Cliente {
-
-    private int id;
+    private int idCliente;
     private String nome;
-    private int celular;
-    private boolean desconto;
+    private int telefone;
+    private int idAnime;
+    private int idCidade;
+    private int idTimeTorcedor;
 
-    public int getId() {
-        return id;
+    public Cliente() {
+        // Construtor vazio
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Cliente(String nome, int telefone, int idAnime, int idCidade, int idTimeTorcedor) {
+        this.nome = nome;
+        this.telefone = telefone;
+        this.idAnime = idAnime;
+        this.idCidade = idCidade;
+        this.idTimeTorcedor = idTimeTorcedor;
+    }
+
+    public int getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
 
     public String getNome() {
@@ -23,20 +36,36 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public int getCelular() {
-        return celular;
+    public int getTelefone() {
+        return telefone;
     }
 
-    public void setCelular(int celular) {
-        this.celular = celular;
+    public void setTelefone(int telefone) {
+        this.telefone = telefone;
     }
 
-    public boolean getDesconto() {
-        return desconto;
+    public int getIdAnime() {
+        return idAnime;
     }
 
-    public void setDesconto(boolean desconto) {
-        this.desconto = desconto;
+    public void setIdAnime(int idAnime) {
+        this.idAnime = idAnime;
     }
 
+    public int getIdCidade() {
+        return idCidade;
+    }
+
+    public void setIdCidade(int idCidade) {
+        this.idCidade = idCidade;
+    }
+
+    public int getIdTimeTorcedor() {
+        return idTimeTorcedor;
+    }
+
+    public void setIdTimeTorcedor(int idTimeTorcedor) {
+        this.idTimeTorcedor = idTimeTorcedor;
+    }
 }
+

@@ -7,17 +7,35 @@ DROP TABLE IF EXISTS vendedor;
 DROP TABLE IF EXISTS fabricante;
 DROP TABLE IF EXISTS categoria;
 DROP TABLE IF EXISTS cliente;
+DROP TABLE IF EXISTS anime;
+DROP TABLE IF EXISTS cidade;
+DROP TABLE IF EXISTS timeTorcedor;
 
-select * from produto;
+CREATE TABLE anime (
+idAnime INT AUTO_INCREMENT PRIMARY KEY,
+nome VARCHAR(100)
+);
 
-CREATE TABLE cliente (
+CREATE TABLE cidade (
+idCidade INT AUTO_INCREMENT PRIMARY KEY,
+nome VARCHAR(100)
+);
+
+CREATE TABLE timeTorcedor (
+idTimeTorcedor INT AUTO_INCREMENT PRIMARY KEY,
+nome VARCHAR(100)
+);
+
+CREATE TABLE cliente ( 
 idCliente INT AUTO_INCREMENT PRIMARY KEY,
 nome VARCHAR(100),
-endereco VARCHAR(100),
 telefone INT(20),
-isTorcedorFlamengo BOOLEAN,
-isFanOnePiece BOOLEAN,
-isSouza BOOLEAN
+idAnime INT,
+idCidade INT,
+idTimeTorcedor INT,
+FOREIGN KEY (idAnime) REFERENCES anime(idAnime),
+FOREIGN KEY (idCidade) REFERENCES cidade(idCidade),
+FOREIGN KEY (idTimeTorcedor) REFERENCES timeTorcedor(idTimeTorcedor)
 );
 
 CREATE TABLE categoria (
@@ -77,25 +95,55 @@ FOREIGN KEY (idVenda) REFERENCES venda(idVenda),
 FOREIGN KEY (idProduto) REFERENCES produto(idProduto)
 );
 
-INSERT INTO categoria (nome) VALUES ('Categoria1');
-INSERT INTO categoria (nome) VALUES ('Categoria2');
-INSERT INTO categoria (nome) VALUES ('Categoria3');
+-- INSERTS --
 
-INSERT INTO fabricante (nome, endereco) VALUES ('Fabricante1', 'Endereco1');
-INSERT INTO fabricante (nome, endereco) VALUES ('Fabricante2', 'Endereco2');
-INSERT INTO fabricante (nome, endereco) VALUES ('Fabricante3', 'Endereco3');
+-- Inserts para a tabela anime
+INSERT INTO anime (nome) VALUES ('Naruto');
+INSERT INTO anime (nome) VALUES ('One Piece');
+INSERT INTO anime (nome) VALUES ('Attack on Titan');
 
-INSERT INTO produto (nome, preco, idCategoria, idFabricante) VALUES ('Produto1', 10.99, 1, 1);
-INSERT INTO produto (nome, preco, idCategoria, idFabricante) VALUES ('Produto2', 20.99, 2, 2);
-INSERT INTO produto (nome, preco, idCategoria, idFabricante) VALUES ('Produto3', 30.99, 3, 3);
+-- Inserts para a tabela cidade
+INSERT INTO cidade (nome) VALUES ('São Paulo');
+INSERT INTO cidade (nome) VALUES ('Rio de Janeiro');
+INSERT INTO cidade (nome) VALUES ('Curitiba');
 
+-- Inserts para a tabela timeFutebol
+INSERT INTO timeTorcedor (nome) VALUES ('Flamengo');
+INSERT INTO timeTorcedor (nome) VALUES ('São Paulo FC');
+INSERT INTO timeTorcedor (nome) VALUES ('Palmeiras');
+
+-- Inserts para a tabela cliente
+INSERT INTO cliente (nome, telefone, idAnime, idCidade, idTimeTorcedor) VALUES ('João', 123456789, 1, 1, 1);
+INSERT INTO cliente (nome, telefone, idAnime, idCidade, idTimeTorcedor) VALUES ('Maria', 987654321, 2, 2, 2);
+INSERT INTO cliente (nome, telefone, idAnime, idCidade, idTimeTorcedor) VALUES ('Pedro', 555555555, 3, 3, 3);
+INSERT INTO cliente (nome, telefone, idAnime, idCidade, idTimeTorcedor) VALUES ('Ana', 111111111, 1, 2, 3);
+INSERT INTO cliente (nome, telefone, idAnime, idCidade, idTimeTorcedor) VALUES ('Lucas', 999999999, 2, 3, 1);
+
+-- Inserts para a tabela categoria
+INSERT INTO categoria (nome) VALUES ('Eletrônicos');
+INSERT INTO categoria (nome) VALUES ('Roupas');
+INSERT INTO categoria (nome) VALUES ('Alimentos');
+
+-- Inserts para a tabela fabricante
+INSERT INTO fabricante (nome, endereco) VALUES ('Fabricante A', 'Endereço A');
+INSERT INTO fabricante (nome, endereco) VALUES ('Fabricante B', 'Endereço B');
+INSERT INTO fabricante (nome, endereco) VALUES ('Fabricante C', 'Endereço C');
+
+-- Inserts para a tabela produto
+INSERT INTO produto (nome, preco, idCategoria, idFabricante) VALUES ('Celular', 999.99, 1, 1);
+INSERT INTO produto (nome, preco, idCategoria, idFabricante) VALUES ('Camiseta', 29.99, 2, 2);
+INSERT INTO produto (nome, preco, idCategoria, idFabricante) VALUES ('Arroz', 4.99, 3, 3);
+
+-- Inserts para a tabela estoque
 INSERT INTO estoque (idProduto, quantidade) VALUES (1, 10);
-INSERT INTO estoque (idProduto, quantidade) VALUES (2, 5);
-INSERT INTO estoque (idProduto, quantidade) VALUES (3, 2);
+INSERT INTO estoque (idProduto, quantidade) VALUES (2, 20);
+INSERT INTO estoque (idProduto, quantidade) VALUES (3, 30);
 
-select * from ProdutoView;
 
-DROP VIEW IF EXISTS ProdutoView;
+-- =-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=- TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+DROP VIEW IF EXISTS produtoView;
+DROP VIEW IF EXISTS clienteView;
 
 CREATE VIEW produtoView AS
 SELECT p.idProduto AS idProduto, p.nome, p.preco, c.nome AS nomeCategoria, f.nome AS nomeFabricante, e.quantidade AS quantidade
@@ -104,6 +152,9 @@ JOIN categoria c ON p.idCategoria = c.idCategoria
 JOIN fabricante f ON p.idFabricante = f.idFabricante
 JOIN estoque e ON p.idProduto = e.idProduto;
 
-
-
-
+CREATE VIEW clienteView AS
+SELECT c.idCliente, c.nome, c.telefone, a.nome AS nomeAnime, cid.nome AS nomeCidade, tf.nome AS nomeTimeTorcedor
+FROM cliente c
+JOIN anime a ON c.idAnime = a.idAnime
+JOIN cidade cid ON c.idCidade = cid.idCidade
+JOIN timeTorcedor tf ON c.idTimeTorcedor = tf.idTimeTorcedor;

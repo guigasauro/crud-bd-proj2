@@ -3,30 +3,23 @@ package br.com.mercado.dao;
 import br.com.mercado.factory.ConnectionFactory;
 import br.com.mercado.model.ProdutoView;
 
-import java.net.SocketOption;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProdutoViewDAO {
-    String sqlAllView = "SELECT * FROM ProdutoView";
+    String sqlAllView = "SELECT * FROM produtoView";
     public static void imprimirProdutos(List<ProdutoView> produtos, String titulo) {
-        if (produtos!=null){ //ajeitar - colocar para quando o array for vazio exibir a mensagem do else
-
-            System.out.println("---- "+ titulo + " ----");
-            for (ProdutoView produto : produtos) {
-                System.out.println("ID:         " + produto.getIdProduto());
-                System.out.println("Nome:       " + produto.getNome());
-                System.out.println("Preço:      R$ " + produto.getPreco());
-                System.out.println("Categoria:  " + produto.getNomeCategoria());
-                System.out.println("Fabricante: " + produto.getNomeFabricante());
-                System.out.println("Quantidade: x" + produto.getQuantidade());
-                System.out.println("---------------------------");
-            }
-        } else {
-            System.out.println("---- Não possui produtos em: " + titulo);
+        System.out.println("---- "+ titulo + " ----");
+        for (ProdutoView produto : produtos) {
+            System.out.println("ID:         " + produto.getIdProduto());
+            System.out.println("Nome:       " + produto.getNome());
+            System.out.println("Preço:      R$ " + produto.getPreco());
+            System.out.println("Categoria:  " + produto.getNomeCategoria());
+            System.out.println("Fabricante: " + produto.getNomeFabricante());
+            System.out.println("Quantidade: x" + produto.getQuantidade());
+            System.out.println("---------------------------");
         }
-
     }
 
     public static List<ProdutoView> getAllProdutoView() {
@@ -40,7 +33,7 @@ public class ProdutoViewDAO {
             conn = ConnectionFactory.createConectionToMySQL();
 
             // Preparar a consulta SQL
-            String sql = "SELECT * FROM ProdutoView";
+            String sql = "SELECT * FROM produtoView";
             pstmt = conn.prepareStatement(sql);
 
             // Executar a consulta
@@ -53,8 +46,9 @@ public class ProdutoViewDAO {
                 double preco = rs.getDouble("preco");
                 String nomeCategoria = rs.getString("nomeCategoria");
                 String nomeFabricante = rs.getString("nomeFabricante");
+                int quantidade = rs.getInt("quantidade");
 
-                ProdutoView produtoView = new ProdutoView(idProduto, nome, preco, nomeCategoria, nomeFabricante, 0);
+                ProdutoView produtoView = new ProdutoView(idProduto, nome, preco, nomeCategoria, nomeFabricante, quantidade);
                 produtoViews.add(produtoView);
             }
         } catch (SQLException e) {
@@ -92,7 +86,7 @@ public class ProdutoViewDAO {
             conn = ConnectionFactory.createConectionToMySQL();
 
             // Preparar a consulta SQL com a cláusula WHERE para filtrar pelo nome
-            String sql = "SELECT * FROM ProdutoView WHERE nome = ?";
+            String sql = "SELECT * FROM produtoView WHERE nome = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, nome);
 
@@ -146,7 +140,7 @@ public class ProdutoViewDAO {
             conn = ConnectionFactory.createConectionToMySQL();
 
             // Preparar a consulta SQL com a cláusula WHERE e a cláusula BETWEEN para filtrar pelo preço
-            String sql = "SELECT * FROM ProdutoView WHERE preco BETWEEN ? AND ?";
+            String sql = "SELECT * FROM produtoView WHERE preco BETWEEN ? AND ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setDouble(1, minPrice);
             pstmt.setDouble(2, maxPrice);
@@ -201,7 +195,7 @@ public class ProdutoViewDAO {
             conn = ConnectionFactory.createConectionToMySQL();
 
             // Preparar a consulta SQL com a cláusula WHERE para filtrar pelo nome
-            String sql = "SELECT * FROM ProdutoView WHERE nomeCategoria = ?";
+            String sql = "SELECT * FROM produtoView WHERE nomeCategoria = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, nome);
 
@@ -255,7 +249,7 @@ public class ProdutoViewDAO {
             conn = ConnectionFactory.createConectionToMySQL();
 
             // Preparar a consulta SQL com a cláusula WHERE para filtrar pelo nome
-            String sql = "SELECT * FROM ProdutoView WHERE nomeFabricante = ?";
+            String sql = "SELECT * FROM produtoView WHERE nomeFabricante = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, nome);
 
@@ -309,7 +303,7 @@ public class ProdutoViewDAO {
             conn = ConnectionFactory.createConectionToMySQL();
 
             // Preparar a consulta SQL com a cláusula WHERE para filtrar pelo nome
-            String sql = "SELECT * FROM ProdutoView WHERE quantidade >= ?";
+            String sql = "SELECT * FROM produtoView WHERE quantidade >= ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, num);
 
