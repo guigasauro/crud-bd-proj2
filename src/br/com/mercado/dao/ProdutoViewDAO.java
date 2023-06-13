@@ -74,6 +74,59 @@ public class ProdutoViewDAO {
         return produtoViews;
     }
 
+    public static ProdutoView getForIdProdutoView(int id){
+        ProdutoView produtoView = null;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            // Estabelecer conexão com o banco de dados
+            conn = ConnectionFactory.createConectionToMySQL();
+
+            // Preparar a consulta SQL com a cláusula WHERE para filtrar pelo id
+            String sql = "SELECT * FROM produtoView WHERE idProduto = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+
+            // Executar a consulta
+            rs = pstmt.executeQuery();
+
+            // Iterar pelos resultados e criar os objetos ProdutoView
+            while (rs.next()) {
+                int idProduto = rs.getInt("idProduto");
+                String nome = rs.getString("nome");
+                double preco = rs.getDouble("preco");
+                String nomeCategoria = rs.getString("nomeCategoria");
+                String nomeFabricante = rs.getString("nomeFabricante");
+                int quantidade = rs.getInt("quantidade");
+
+                produtoView = new ProdutoView(idProduto, nome, preco, nomeCategoria, nomeFabricante, quantidade);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            // Fechar os recursos
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return produtoView;
+    }
+
     public static List<ProdutoView> getForNameProdutoView(String nome) {
         List<ProdutoView> produtoViews = new ArrayList<>();
         Connection conn = null;
