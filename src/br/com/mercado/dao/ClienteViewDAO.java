@@ -21,61 +21,6 @@ public class ClienteViewDAO {
         }
     }
 
-    public static List<ClienteView> getClientesById(int id) {
-        List<ClienteView> clientes = new ArrayList<>();
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
-        try {
-            // Estabelecer conexão com o banco de dados
-            conn = ConnectionFactory.createConectionToMySQL();
-
-            // Preparar a consulta SQL
-            String sql = "SELECT * FROM ClienteView WHERE idCliente = ?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, id);
-
-            // Executar a consulta
-            rs = pstmt.executeQuery();
-
-            // Iterar pelos resultados e criar os objetos ClienteView
-            while (rs.next()) {
-                int clienteId = rs.getInt("idCliente");
-                String nome = rs.getString("nome");
-                int telefone = rs.getInt("telefone");
-                String nomeAnime = rs.getString("nomeAnime");
-                String nomeCidade = rs.getString("nomeCidade");
-                String nomeTime = rs.getString("nomeTime");
-
-                ClienteView clienteView = new ClienteView(clienteId, nome, telefone, nomeAnime, nomeCidade, nomeTime);
-                clientes.add(clienteView);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            // Fechar os recursos
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return clientes;
-    }
-
-
     public static List<ClienteView> getAllClienteView() {
         List<ClienteView> clienteViews = new ArrayList<>();
         Connection conn = null;
@@ -100,7 +45,7 @@ public class ClienteViewDAO {
                 int telefone = rs.getInt("telefone");
                 String nomeAnime = rs.getString("nomeAnime");
                 String nomeCidade = rs.getString("nomeCidade");
-                String nomeTime = rs.getString("nomeTime");
+                String nomeTime = rs.getString("nomeTimeTorcedor");
 
                 ClienteView clienteView = new ClienteView(idCliente, nome, telefone, nomeAnime, nomeCidade, nomeTime);
                 clienteViews.add(clienteView);
@@ -128,6 +73,61 @@ public class ClienteViewDAO {
 
         return clienteViews;
     }
+
+    public static List<ClienteView> getClientesById(int id) {
+        List<ClienteView> clientes = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            // Estabelecer conexão com o banco de dados
+            conn = ConnectionFactory.createConectionToMySQL();
+
+            // Preparar a consulta SQL
+            String sql = "SELECT * FROM ClienteView WHERE idCliente = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+
+            // Executar a consulta
+            rs = pstmt.executeQuery();
+
+            // Iterar pelos resultados e criar os objetos ClienteView
+            while (rs.next()) {
+                int idCliente = rs.getInt("idCliente");
+                String nome = rs.getString("nome");
+                int telefone = rs.getInt("telefone");
+                String nomeAnime = rs.getString("nomeAnime");
+                String nomeCidade = rs.getString("nomeCidade");
+                String nomeTime = rs.getString("nomeTimeTorcedor");
+
+                ClienteView clienteView = new ClienteView(idCliente, nome, telefone, nomeAnime, nomeCidade, nomeTime);
+                clientes.add(clienteView);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            // Fechar os recursos
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pstmt != null) {
+                    pstmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return clientes;
+    }
+
 
 
 }

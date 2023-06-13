@@ -8,13 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProdutoViewDAO {
-    String sqlAllView = "SELECT * FROM produtoView";
     public static void imprimirProdutos(List<ProdutoView> produtos, String titulo) {
         System.out.println("---- "+ titulo + " ----");
         for (ProdutoView produto : produtos) {
             System.out.println("ID:         " + produto.getIdProduto());
             System.out.println("Nome:       " + produto.getNome());
-            System.out.println("Preço:      R$ " + produto.getPreco());
+            System.out.println("Preço:      " + produto.getPreco());
             System.out.println("Categoria:  " + produto.getNomeCategoria());
             System.out.println("Fabricante: " + produto.getNomeFabricante());
             System.out.println("Quantidade: x" + produto.getQuantidade());

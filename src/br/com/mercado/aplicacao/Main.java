@@ -82,7 +82,6 @@ public class Main {
 
                 System.out.println("Cadastrado com sucesso!, seu ID: " + idCliente);
 
-                break;
             } else if (opcao==9) {
                 int idCliente = 0;
                 do {
@@ -91,7 +90,8 @@ public class Main {
                 } while (idCliente==0);
                 System.out.println("Login efetuado com sucesso!, seu ID: " + idCliente);
             } else if (opcao==10) {
-                break;
+                int idCLiente = 1;
+                ClienteViewDAO.imprimirClientes(ClienteViewDAO.getClientesById(idCLiente), "Seus dados");
             }
         }
     }

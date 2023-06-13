@@ -23,6 +23,7 @@ restrições de integridade referencial para as tabelas.
 Não há nenhuma imposição em relação à plataforma de implementação dos projetos, nem mesmo
 do modelo de Banco de Dados a ser utilizado. A escolha de uma plataforma adequada ao problema
 a ser resolvido faz parte do trabalho da disciplina.
+
 Pode usar qualquer SGBD que você quiser, desde que esteja instalado nos laboratórios do CI.
 Outros SGBDs podem também ser utilizados se você conseguir autorização para instalá-lo no CI ou
 se você dispuser de um Laptop e puder trazê-lo para fazer a apresentação do projeto. Ou rodá-lo por

@@ -70,13 +70,13 @@ FOREIGN KEY (idFabricante) REFERENCES fabricante(idFabricante)
 );
 
 CREATE TABLE estoque (
-idProduto INT,
+idProduto INT AUTO_INCREMENT PRIMARY KEY,
 quantidade INT,
 FOREIGN KEY (idProduto) REFERENCES produto(idProduto)
 );
 
-CREATE TABLE venda (
-idVenda INT PRIMARY KEY,
+CREATE TABLE venda ( -- Venda completa
+idVenda INT PRIMARY KEY AUTO_INCREMENT,
 idCliente INT,
 idVendedor INT,
 idFormaPagamento INT,
@@ -84,16 +84,17 @@ dataVenda DATE,
 FOREIGN KEY (idCliente) REFERENCES cliente(idCliente),
 FOREIGN KEY (idVendedor) REFERENCES vendedor(idVendedor),
 FOREIGN KEY (idFormaPagamento) REFERENCES formaPagamento(idFormaPagamento)
-);
+); 
 
-CREATE TABLE itemVenda (
-idItemVenda INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE itemVenda ( -- apenas um tipo de item
+idItemVenda INT PRIMARY KEY AUTO_INCREMENT,
 idVenda INT,
 idProduto INT,
 quantidade INT,
 FOREIGN KEY (idVenda) REFERENCES venda(idVenda),
 FOREIGN KEY (idProduto) REFERENCES produto(idProduto)
 );
+
 
 -- INSERTS --
 
@@ -135,15 +136,37 @@ INSERT INTO produto (nome, preco, idCategoria, idFabricante) VALUES ('Camiseta',
 INSERT INTO produto (nome, preco, idCategoria, idFabricante) VALUES ('Arroz', 4.99, 3, 3);
 
 -- Inserts para a tabela estoque
-INSERT INTO estoque (idProduto, quantidade) VALUES (1, 10);
-INSERT INTO estoque (idProduto, quantidade) VALUES (2, 20);
-INSERT INTO estoque (idProduto, quantidade) VALUES (3, 30);
+INSERT INTO estoque (quantidade) VALUES (10);
+INSERT INTO estoque (quantidade) VALUES (20);
+INSERT INTO estoque (quantidade) VALUES (30);
+
+-- Inserts forma de pagamentos
+INSERT INTO formaPagamento (nome) VALUES ('Cartão');
+INSERT INTO formaPagamento (nome) VALUES ('Boleto');
+INSERT INTO formaPagamento (nome) VALUES ('Pix');
+INSERT INTO formaPagamento (nome) VALUES ('Berries');
+
+-- Inserts vendedor
+INSERT INTO vendedor (nome) VALUES ('João');
+INSERT INTO vendedor (nome) VALUES ('Maria');
+INSERT INTO vendedor (nome) VALUES ('Pedro');
+
+-- Inserts para a tabela venda
+INSERT INTO venda (idCliente, idVendedor, idFormaPagamento, dataVenda) VALUES (1, 1, 1, '2023-05-20');
+-- INSERT INTO venda (idVenda, idCliente, idVendedor, idFormaPagamento, dataVenda) VALUES (2, 2, 2, 2, '2023-05-21');
+-- INSERT INTO venda (idVenda, idCliente, idVendedor, idFormaPagamento, dataVenda) VALUES (3, 3, 1, 1, '2023-05-22');
+
+-- Inserts para a tabela itemVenda
+INSERT INTO itemVenda (idVenda, idProduto, quantidade) VALUES (1, 1, 5);
+INSERT INTO itemVenda (idVenda, idProduto, quantidade) VALUES (1, 2, 3);
+INSERT INTO itemVenda (idVenda, idProduto, quantidade) VALUES (1, 3, 2);
 
 
--- =-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=-=- TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+-- CRIAÇÃO DE VIEWS
 
 DROP VIEW IF EXISTS produtoView;
 DROP VIEW IF EXISTS clienteView;
+DROP VIEW vendaView;
 
 CREATE VIEW produtoView AS
 SELECT p.idProduto AS idProduto, p.nome, p.preco, c.nome AS nomeCategoria, f.nome AS nomeFabricante, e.quantidade AS quantidade
@@ -158,3 +181,21 @@ FROM cliente c
 JOIN anime a ON c.idAnime = a.idAnime
 JOIN cidade cid ON c.idCidade = cid.idCidade
 JOIN timeTorcedor tf ON c.idTimeTorcedor = tf.idTimeTorcedor;
+
+CREATE VIEW vendaView AS
+SELECT v.idVenda,
+		iv.idItemVenda,
+		c.nome AS nomeCliente,
+        ve.nome AS nomeVendedor,
+        fp.nome AS formaPagamento,
+        iv.idProduto,
+        p.nome AS nomeProduto,
+        iv.quantidade,
+        p.preco AS precoProduto,
+        v.dataVenda
+FROM venda v
+JOIN cliente c ON v.idCliente = c.idCliente
+JOIN vendedor ve ON v.idVendedor = ve.idVendedor
+JOIN formaPagamento fp ON v.idFormaPagamento = fp.idFormaPagamento
+JOIN itemVenda iv ON v.idVenda = iv.idVenda
+JOIN produto p ON iv.idProduto = p.idProduto;
