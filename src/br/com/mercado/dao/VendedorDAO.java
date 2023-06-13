@@ -1,31 +1,24 @@
 package br.com.mercado.dao;
 
 import br.com.mercado.factory.ConnectionFactory;
-import br.com.mercado.model.ItemVenda;
-import br.com.mercado.model.ProdutoView;
-import br.com.mercado.dao.ProdutoViewDAO;
+import br.com.mercado.model.Vendedor;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ItemVendaDAO {
-    public static void ImprimirItensVenda(List<ItemVenda> itensVenda, String titulo) {
+public class VendedorDAO {
+    public static void imprimirVendedores(List<Vendedor> vendedores, String titulo) {
         System.out.println("---- " + titulo + " ----");
-        for (ItemVenda itemVenda : itensVenda) {
-            int idproduto = itemVenda.getIdProduto();
-            ProdutoView produto = ProdutoViewDAO.getForIdProdutoView(idproduto);
-            System.out.println("ID:              " + itemVenda.getId());
-            System.out.println("ID Produto:      " + idproduto);
-            System.out.println("ID Venda:        " + itemVenda.getIdVenda());
-            System.out.println("Quantidade:      " + itemVenda.getQuantidade());
-            System.out.println("Valor Unitário:  " + produto.getPreco());
-            System.out.println("Valor Total:     " + produto.getPreco() * itemVenda.getQuantidade());
+        for (Vendedor vendedor : vendedores) {
+            System.out.println("ID:   " + vendedor.getId());
+            System.out.println("Nome: " + vendedor.getNome());
             System.out.println("---------------------------");
         }
     }
 
-    public static List<ItemVenda> getAllItemVenda(){
-        List<ItemVenda> itensVenda = null;
+    public static List<Vendedor> getAllVendedor(){
+        List<Vendedor> vendedores = new ArrayList<>();
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -33,19 +26,17 @@ public class ItemVendaDAO {
         try{
             conn = ConnectionFactory.createConectionToMySQL();
 
-            String sql = "SELECT * FROM itemvenda";
+            String sql = "SELECT * FROM vendedor";
             pstmt = conn.prepareStatement(sql);
 
             rs = pstmt.executeQuery();
 
             while(rs.next()){
-                int id = rs.getInt("idItemVenda");
-                int idProduto = rs.getInt("idProduto");
-                int idVenda = rs.getInt("idVenda");
-                int quantidade = rs.getInt("quantidade");
+                int id = rs.getInt("idVendedor");
+                String nome = rs.getString("nome");
 
-                ItemVenda itemVenda = new ItemVenda(id, idProduto, idVenda, quantidade);
-                itensVenda.add(itemVenda);
+                Vendedor vendedor = new Vendedor(id, nome);
+                vendedores.add(vendedor);
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -66,11 +57,12 @@ public class ItemVendaDAO {
                 e.printStackTrace();
             }
         }
-        return itensVenda;
+
+        return vendedores;
     }
 
-    public static ItemVenda getForIdItemVenda(int id){
-        ItemVenda itemVenda = null;
+    public static Vendedor getVendedorById(int id){
+        Vendedor vendedor = null;
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -78,18 +70,16 @@ public class ItemVendaDAO {
         try{
             conn = ConnectionFactory.createConectionToMySQL();
 
-            String sql = "SELECT * FROM itemvenda WHERE idItemVenda = ?";
+            String sql = "SELECT * FROM vendedor WHERE idVendedor = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, id);
 
             rs = pstmt.executeQuery();
 
             while(rs.next()){
-                int idProduto = rs.getInt("idProduto");
-                int idVenda = rs.getInt("idVenda");
-                int quantidade = rs.getInt("quantidade");
+                String nome = rs.getString("nome");
 
-                itemVenda = new ItemVenda(id, idProduto, idVenda, quantidade);
+                vendedor = new Vendedor(id, nome);
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -110,11 +100,12 @@ public class ItemVendaDAO {
                 e.printStackTrace();
             }
         }
-        return itemVenda;
+
+        return vendedor;
     }
 
-    public static List<ItemVenda> getForVendaItemVenda(int idVenda){
-        List<ItemVenda> itensVenda = null;
+    public static Vendedor getVendedorByNome(String nome){
+        Vendedor vendedor = null;
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -122,19 +113,16 @@ public class ItemVendaDAO {
         try{
             conn = ConnectionFactory.createConectionToMySQL();
 
-            String sql = "SELECT * FROM itemvenda WHERE idVenda = ?";
+            String sql = "SELECT * FROM vendedor WHERE nome = ?";
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, idVenda);
+            pstmt.setString(1, nome);
 
             rs = pstmt.executeQuery();
 
             while(rs.next()){
-                int id = rs.getInt("idItemVenda");
-                int idProduto = rs.getInt("idProduto");
-                int quantidade = rs.getInt("quantidade");
+                int id = rs.getInt("idVendedor");
 
-                ItemVenda itemVenda = new ItemVenda(id, idProduto, idVenda, quantidade);
-                itensVenda.add(itemVenda);
+                vendedor = new Vendedor(id, nome);
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -155,15 +143,7 @@ public class ItemVendaDAO {
                 e.printStackTrace();
             }
         }
-        return itensVenda;
-    }
 
-    public static int getTotal(List<ItemVenda> carrinho){
-        int total = 0;
-        for (ItemVenda produto : carrinho) {
-            double preco = ProdutoViewDAO.getForIdProdutoView(produto.getIdProduto()).getPreco();
-            total += preco * produto.getQuantidade();
-        }
-        return total;
+        return vendedor;
     }
 }

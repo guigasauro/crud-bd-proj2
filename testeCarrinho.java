@@ -1,9 +1,13 @@
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
 import br.com.mercado.dao.ItemVendaDAO;
 import br.com.mercado.dao.ProdutoViewDAO;
+import br.com.mercado.dao.VendedorDAO;
 import br.com.mercado.model.ItemVenda;
+import br.com.mercado.model.Venda;
 import br.com.mercado.service.MainService;
 
 public class testeCarrinho {
@@ -61,9 +65,39 @@ public class testeCarrinho {
                 System.out.println("[" + i + "] " + carrinho.get(i).getIdProduto() + " - " + ProdutoViewDAO.getForIdProdutoView(carrinho.get(i).getIdProduto()).getNome() + " - " + carrinho.get(i).getQuantidade());
             }
         } else if (opcao==5) {
-            //MenuFinalizarCompra();
+            System.out.println("Resumo da compra");
+
+            System.out.println("Produtos no carrinho: " + carrinho.size());
+            for(int i = 0; i < carrinho.size(); i++){
+                System.out.println("[" + i + "] " + carrinho.get(i).getIdProduto() + " - " + ProdutoViewDAO.getForIdProdutoView(carrinho.get(i).getIdProduto()).getNome() + " - " + carrinho.get(i).getQuantidade());
+            }
+
+            System.out.println("Total: " + ItemVendaDAO.getTotal(carrinho));
+            System.out.println("Deseja finalizar a compra?");
+            System.out.println("[1] Sim");
+            System.out.println("[0] Não");
+            int opcao2 = MainService.perguntaNumeroInt("Digite a opção desejada: ");
+            
+            if(opcao2 == 0){
+                //Carrinho();
+            }else if(opcao2==1){
+
+                VendedorDAO.imprimirVendedores(VendedorDAO.getAllVendedor(), "Lista de vendedores");
+
+                int idVendedor = MainService.perguntaNumeroInt("Insira o ID do vendedor que lhe auxiliou: ");
+
+                System.out.println("Formas de pagamento");
+                System.out.println("[1] PIX"); 
+                System.out.println("[2] Cartão");
+                System.out.println("[3] Berries");
+                System.out.println("[4] Boleto Bancário");
+                int idFormaPagamento = MainService.perguntaNumeroInt("Insira a forma de pagamento: ");
+                
+                LocalDate dataAtual = LocalDate.now();
+                Date dataVenda = Date.valueOf(dataAtual);
+                Venda venda = new Venda(1 , idVendedor, idFormaPagamento, dataVenda);
+                System.out.println("Compra finalizada com sucesso!");
+            }
         }
-
-
     }
 }
